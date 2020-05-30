@@ -1,4 +1,4 @@
-class Mission {
+class MissionModel {
   final String _mission_name;
   final String _mission_id;
   final List<String> _manufacturers;
@@ -8,7 +8,7 @@ class Mission {
   final String _twitter;
   final String _description;
 
-  Mission({
+  MissionModel({
     String mission_name,
     String mission_id,
     List<String> manufacturers,
@@ -26,8 +26,8 @@ class Mission {
         _twitter = twitter,
         _description = description;
 
-  factory Mission.fromMap(Map<String, dynamic> map) {
-    return Mission(
+  factory MissionModel.fromMap(Map<String, dynamic> map) {
+    return MissionModel(
       mission_name: map['mission_name'] != null ? map['mission_name'] : null,
       mission_id: map['mission_id'] != null ? map['mission_id'] : null,
       wikipedia: map['wikipedia'] != null ? map['wikipedia'] : null,

@@ -66,6 +66,8 @@ abstract class _CapsuleStore with Store {
         var newList = await _capsuleLoadMoreFuture;
         capsuleList.addAll(newList);
       }
-    } catch (e) {}
+    } catch (e) {
+      errorMessage = e.toString();
+    }
   }
 }

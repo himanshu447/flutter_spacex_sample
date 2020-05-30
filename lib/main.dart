@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterspacexsample/components/text_component.dart';
 
 import 'capsule/page/capsule_page.dart';
+import 'mission/page/mission_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -56,9 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: CapsuleView()
     ));
     _widgetList.add(Container(
-      child: TextComponent(
-        title: 'Widget 2',
-      ),
+      child: MissionView()
     ));
     _widgetList.add(Container(
       child: TextComponent(

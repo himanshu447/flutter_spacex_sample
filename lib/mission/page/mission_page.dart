@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutterspacexsample/capsule/repository/capsule_repository.dart';
-import 'package:flutterspacexsample/capsule/store/capsule_store.dart';
-import 'package:flutterspacexsample/capsule/widget/capsule_item.dart';
 import 'package:flutterspacexsample/components/text_component.dart';
+import 'package:flutterspacexsample/mission/repository/mission_repository.dart';
+import 'package:flutterspacexsample/mission/store/mission_store.dart';
+import 'package:flutterspacexsample/mission/widget/mission_item.dart';
 import 'package:flutterspacexsample/utils/enum_utils.dart';
 import 'package:mobx/mobx.dart';
 
-class CapsuleView extends StatefulWidget {
+class MissionView extends StatefulWidget {
   @override
-  _CapsuleViewState createState() => _CapsuleViewState();
+  _MissionPAgeState createState() => _MissionPAgeState();
 }
 
-class _CapsuleViewState extends State<CapsuleView> {
-  CapsuleStore capsuleStore;
-  ScrollController scrollController = ScrollController();
+class _MissionPAgeState extends State<MissionView> {
+  MissionStore missionStore;
   final GlobalKey<ScaffoldState> globalKey = GlobalKey();
+  ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    capsuleStore = CapsuleStore(capsuleRepository: CapsuleRepository());
-    capsuleStore.fetchCapsules();
+    missionStore = MissionStore(missionRepository: MissionRepository());
+    missionStore.fetchMission();
     scrollController = ScrollController()..addListener(_scrollerListener);
 
-    reaction((_) => capsuleStore.errorMessage, (msg) {
+    reaction((_) => missionStore.errorMessage, (msg) {
       globalKey.currentState.showSnackBar(SnackBar(
         content: TextComponent(
           title: msg,
@@ -37,7 +37,7 @@ class _CapsuleViewState extends State<CapsuleView> {
 
   _scrollerListener() {
     if (scrollController.position.extentAfter == 0.0) {
-      capsuleStore.fetchCapsules(offset: 5);
+      missionStore.fetchMission(offset: 5);
     }
   }
 
@@ -53,7 +53,7 @@ class _CapsuleViewState extends State<CapsuleView> {
       key: globalKey,
       body: Observer(
         builder: (_) {
-          switch (capsuleStore.capsuleState) {
+          switch (missionStore.missionState) {
             case StoreState.initial:
               return Center(
                 child: CircularProgressIndicator(),
@@ -83,16 +83,16 @@ class _CapsuleViewState extends State<CapsuleView> {
             padding: EdgeInsets.symmetric(horizontal: 12),
             controller: scrollController,
             itemBuilder: (_, index) {
-              return CapsuleItem(
-                capsuleModel: capsuleStore.capsuleList[index],
+              return MissionItem(
+                missionModel: missionStore.missionList[index],
               );
             },
-            itemCount: capsuleStore.capsuleList.length,
+            itemCount: missionStore.missionList.length,
           ),
         ),
         Visibility(
-            visible: capsuleStore.capsuleLoadMoreState == StoreState.loading ||
-                capsuleStore.capsuleLoadMoreState == StoreState.initial,
+            visible: missionStore.missionLoadMoreState == StoreState.loading ||
+                missionStore.missionLoadMoreState == StoreState.initial,
             child: Container(
               color: Colors.transparent,
               child: Center(
