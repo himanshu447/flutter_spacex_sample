@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutterspacexsample/components/text_component.dart';
+import 'package:flutterspacexsample/utils/route_name_utils.dart';
 
 import 'capsule/page/capsule_page.dart';
+import 'history/page/history_detail.dart';
+import 'history/page/history_page.dart';
+import 'history/page/webview_item.dart';
 import 'launches/page/launch_page.dart';
 import 'mission/page/mission_page.dart';
 
@@ -20,6 +24,20 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      onGenerateRoute: (setting) {
+        switch (setting.name) {
+          case RouteName.history_detail:
+            return MaterialPageRoute(
+              builder: (context) => HistoryDetailView(historyModel: setting.arguments,),
+            );
+          case RouteName.webView:
+            return MaterialPageRoute(
+              builder: (context) => WebViewContainer(setting.arguments),
+            );
+          default:
+            return null;
+        }
+      },
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -48,18 +66,14 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    _navBarText.add('Capsules');
-    _navBarText.add('Missions');
-    _navBarText.add('Launches');
-    _navBarText.add('Rockets');
+    _navBarText.add('Capsule');
+    _navBarText.add('Mission');
+    _navBarText.add('Launche');
+    _navBarText.add('Rocket');
     _navBarText.add('History');
 
-    _widgetList.add(Container(
-      child: CapsuleView()
-    ));
-    _widgetList.add(Container(
-      child: MissionView()
-    ));
+    _widgetList.add(Container(child: CapsuleView()));
+    _widgetList.add(Container(child: MissionView()));
     _widgetList.add(Container(
       child: LaunchView(),
     ));
@@ -68,11 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: 'Widget 4',
       ),
     ));
-    _widgetList.add(Container(
-      child: TextComponent(
-        title: 'Widget 5',
-      ),
-    ));
+    _widgetList.add(Container(child: HistoryView()));
   }
 
   @override
@@ -109,6 +119,13 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: (index) {
           _onItemTapped(index);
         },
+      ),
+      drawer: Drawer(
+        child: Column(
+          children: <Widget>[
+            Image.asset('assets/space.png')
+          ],
+        ),
       ),
     );
   }

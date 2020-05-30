@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutterspacexsample/components/progress_component.dart';
 import 'package:flutterspacexsample/components/text_component.dart';
 import 'package:flutterspacexsample/launches/repository/launch_repository.dart';
 import 'package:flutterspacexsample/launches/store/launch_store.dart';
@@ -13,12 +14,10 @@ class LaunchView extends StatefulWidget {
 }
 
 class _LaunchViewState extends State<LaunchView> {
-  
   LaunchStore launchStore;
   final GlobalKey<ScaffoldState> globalKey = GlobalKey();
   ScrollController pastScrollController = ScrollController();
   ScrollController upcomingScrollController = ScrollController();
-
 
   @override
   void initState() {
@@ -28,8 +27,10 @@ class _LaunchViewState extends State<LaunchView> {
     launchStore.fetchUpComingLaunch();
     launchStore.fetchPastLaunch();
 
-    pastScrollController = ScrollController()..addListener(_pastScrollerListener);
-    upcomingScrollController = ScrollController()..addListener(_upComingScrollerListener);
+    pastScrollController = ScrollController()
+      ..addListener(_pastScrollerListener);
+    upcomingScrollController = ScrollController()
+      ..addListener(_upComingScrollerListener);
 
     reaction((_) => launchStore.errorMessage, (msg) {
       globalKey.currentState.showSnackBar(SnackBar(
@@ -53,7 +54,7 @@ class _LaunchViewState extends State<LaunchView> {
       launchStore.fetchUpComingLaunch(offset: 5);
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +64,8 @@ class _LaunchViewState extends State<LaunchView> {
         child: Column(
           children: <Widget>[
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 30).copyWith(top: 25,bottom: 20),
+              margin: EdgeInsets.symmetric(horizontal: 30)
+                  .copyWith(top: 25, bottom: 20),
               decoration: BoxDecoration(
                 color: Colors.transparent,
                 border: Border.all(
@@ -108,10 +110,12 @@ class _LaunchViewState extends State<LaunchView> {
             Flexible(
               child: TabBarView(
                 children: [
-                  Center(child: TextComponent(title: 'Latest',)),
-                  
+                  Center(
+                      child: TextComponent(
+                    title: 'Latest',
+                  )),
                   Observer(
-                    builder: (_){
+                    builder: (_) {
                       switch (launchStore.upComingLaunchState) {
                         case StoreState.initial:
                           return Center(
@@ -131,9 +135,8 @@ class _LaunchViewState extends State<LaunchView> {
                       }
                     },
                   ),
-  
                   Observer(
-                    builder: (_){
+                    builder: (_) {
                       switch (launchStore.pastLaunchState) {
                         case StoreState.initial:
                           return Center(
@@ -153,7 +156,6 @@ class _LaunchViewState extends State<LaunchView> {
                       }
                     },
                   ),
-                  
                 ],
               ),
             ),
@@ -162,9 +164,8 @@ class _LaunchViewState extends State<LaunchView> {
       ),
     );
   }
-  
-  Widget _buildUpComingBody(){
-   
+
+  Widget _buildUpComingBody() {
     return Column(
       children: <Widget>[
         Expanded(
@@ -180,19 +181,15 @@ class _LaunchViewState extends State<LaunchView> {
           ),
         ),
         Visibility(
-            visible: launchStore.upComingLaunchLoadMoreState == StoreState.loading || launchStore.upComingLaunchLoadMoreState == StoreState.initial,
-            child: Container(
-              color: Colors.transparent,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            ))
+            visible: launchStore.upComingLaunchLoadMoreState ==
+                    StoreState.loading ||
+                launchStore.upComingLaunchLoadMoreState == StoreState.initial,
+            child: ProgressComponent())
       ],
     );
   }
 
-  Widget _buildPastBody(){
-  
+  Widget _buildPastBody() {
     return Column(
       children: <Widget>[
         Expanded(
@@ -208,13 +205,10 @@ class _LaunchViewState extends State<LaunchView> {
           ),
         ),
         Visibility(
-            visible: launchStore.pastLaunchLoadMoreState == StoreState.loading || launchStore.pastLaunchLoadMoreState == StoreState.initial,
-            child: Container(
-              color: Colors.transparent,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            ))
+            visible:
+                launchStore.pastLaunchLoadMoreState == StoreState.loading ||
+                    launchStore.pastLaunchLoadMoreState == StoreState.initial,
+            child: ProgressComponent())
       ],
     );
   }

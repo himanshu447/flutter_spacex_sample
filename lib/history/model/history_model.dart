@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 
 import 'history_links_model.dart';
 
-class History {
+class HistoryModel {
 	final int _id;
 	final String _title;
 	final DateTime _event_date_utc;
@@ -11,7 +11,7 @@ class History {
 	final String _details;
 	final HistoryLinks _links;
 	
-	History({
+	HistoryModel({
 		int id,
 		String title,
 		DateTime event_date_utc,
@@ -27,8 +27,8 @@ class History {
 				_details = details,
 				_links = links;
 	
-	factory History.fromMap(Map<String, dynamic> map) {
-		return History(
+	factory HistoryModel.fromMap(Map<String, dynamic> map) {
+		return HistoryModel(
 			id: map['id'] != null ? (map['id'] as num).toInt(): null,
 			title: map['title'] != null ? map['title'] : null,
 			flight_number: map['flight_number'] != null ? (map['flight_number'] as num).toInt(): null,

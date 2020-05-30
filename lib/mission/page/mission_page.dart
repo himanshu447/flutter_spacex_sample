@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutterspacexsample/components/progress_component.dart';
 import 'package:flutterspacexsample/components/text_component.dart';
 import 'package:flutterspacexsample/mission/repository/mission_repository.dart';
 import 'package:flutterspacexsample/mission/store/mission_store.dart';
@@ -91,14 +92,10 @@ class _MissionPAgeState extends State<MissionView> {
           ),
         ),
         Visibility(
-            visible: missionStore.missionLoadMoreState == StoreState.loading ||
-                missionStore.missionLoadMoreState == StoreState.initial,
-            child: Container(
-              color: Colors.transparent,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            ))
+          visible: missionStore.missionLoadMoreState == StoreState.loading ||
+              missionStore.missionLoadMoreState == StoreState.initial,
+          child: ProgressComponent(),
+        )
       ],
     );
   }

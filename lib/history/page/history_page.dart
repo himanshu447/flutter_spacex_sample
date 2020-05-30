@@ -1,31 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutterspacexsample/capsule/repository/capsule_repository.dart';
-import 'package:flutterspacexsample/capsule/store/capsule_store.dart';
-import 'package:flutterspacexsample/capsule/widget/capsule_item.dart';
 import 'package:flutterspacexsample/components/progress_component.dart';
 import 'package:flutterspacexsample/components/text_component.dart';
+import 'package:flutterspacexsample/history/repository/history_repository.dart';
+import 'package:flutterspacexsample/history/store/history_store.dart';
+import 'package:flutterspacexsample/history/widget/history_item.dart';
 import 'package:flutterspacexsample/utils/enum_utils.dart';
 import 'package:mobx/mobx.dart';
 
-class CapsuleView extends StatefulWidget {
+class HistoryView extends StatefulWidget {
   @override
-  _CapsuleViewState createState() => _CapsuleViewState();
+  _HistoryViewState createState() => _HistoryViewState();
 }
 
-class _CapsuleViewState extends State<CapsuleView> {
-  CapsuleStore capsuleStore;
+class _HistoryViewState extends State<HistoryView> {
+  HistoryStore historyStore;
   ScrollController scrollController = ScrollController();
   final GlobalKey<ScaffoldState> globalKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
-    capsuleStore = CapsuleStore(capsuleRepository: CapsuleRepository());
-    capsuleStore.fetchCapsules();
+    historyStore = HistoryStore(historyRepository: HistoryRepository());
+    historyStore.fetchHistory();
     scrollController = ScrollController()..addListener(_scrollerListener);
 
-    reaction((_) => capsuleStore.errorMessage, (msg) {
+    reaction((_) => historyStore.errorMessage, (msg) {
       globalKey.currentState.showSnackBar(SnackBar(
         content: TextComponent(
           title: msg,
@@ -38,7 +38,7 @@ class _CapsuleViewState extends State<CapsuleView> {
 
   _scrollerListener() {
     if (scrollController.position.extentAfter == 0.0) {
-      capsuleStore.fetchCapsules(offset: 5);
+      historyStore.fetchHistory(offset: 5);
     }
   }
 
@@ -54,7 +54,7 @@ class _CapsuleViewState extends State<CapsuleView> {
       key: globalKey,
       body: Observer(
         builder: (_) {
-          switch (capsuleStore.capsuleState) {
+          switch (historyStore.historyState) {
             case StoreState.initial:
               return Center(
                 child: CircularProgressIndicator(),
@@ -84,16 +84,16 @@ class _CapsuleViewState extends State<CapsuleView> {
             padding: EdgeInsets.symmetric(horizontal: 12),
             controller: scrollController,
             itemBuilder: (_, index) {
-              return CapsuleItem(
-                capsuleModel: capsuleStore.capsuleList[index],
+              return HistoryItem(
+                historyModel: historyStore.historyList[index],
               );
             },
-            itemCount: capsuleStore.capsuleList.length,
+            itemCount: historyStore.historyList.length,
           ),
         ),
         Visibility(
-          visible: capsuleStore.capsuleLoadMoreState == StoreState.loading ||
-              capsuleStore.capsuleLoadMoreState == StoreState.initial,
+          visible: historyStore.historyLoadMoreState == StoreState.loading ||
+              historyStore.historyLoadMoreState == StoreState.initial,
           child: ProgressComponent(),
         )
       ],
