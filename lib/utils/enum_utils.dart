@@ -11,4 +11,6 @@ class EnumUtil {
 	}
 }
 
+enum StoreState { initial, loading, loaded }
+
 enum CapsuleStatus { active, destroyed, unknown, retired }
